@@ -1,0 +1,37 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const authRoutes_1 = __importDefault(require("./authRoutes"));
+const roomRoutes_1 = __importDefault(require("./roomRoutes"));
+const messRoutes_1 = __importDefault(require("./messRoutes"));
+const enquiryRoutes_1 = __importDefault(require("./enquiryRoutes"));
+const dealRoutes_1 = __importDefault(require("./dealRoutes"));
+const agreementRoutes_1 = __importDefault(require("./agreementRoutes"));
+const subscriptionRoutes_1 = __importDefault(require("./subscriptionRoutes"));
+const paymentRoutes_1 = __importDefault(require("./paymentRoutes"));
+const chatRoutes_1 = __importDefault(require("./chatRoutes"));
+const favoriteRoutes_1 = __importDefault(require("./favoriteRoutes"));
+const reviewRoutes_1 = __importDefault(require("./reviewRoutes"));
+const miscRoutes_1 = __importDefault(require("./miscRoutes"));
+const uploadRoutes_1 = __importDefault(require("./uploadRoutes"));
+const adminRoutes_1 = __importDefault(require("./adminRoutes"));
+const router = (0, express_1.Router)();
+router.use('/auth', authRoutes_1.default);
+router.use('/rooms', roomRoutes_1.default);
+router.use('/messes', messRoutes_1.default);
+router.use('/enquiries', enquiryRoutes_1.default);
+router.use('/deals', dealRoutes_1.default);
+router.use('/agreements', agreementRoutes_1.default);
+router.use('/subscriptions', subscriptionRoutes_1.default);
+router.use('/payments', paymentRoutes_1.default);
+router.use('/chat', chatRoutes_1.default);
+router.use('/favorites', favoriteRoutes_1.default);
+router.use('/reviews', reviewRoutes_1.default);
+router.use('/upload', uploadRoutes_1.default);
+router.use('/admin', adminRoutes_1.default);
+router.use('/', miscRoutes_1.default);
+exports.default = router;
+//# sourceMappingURL=index.js.map
