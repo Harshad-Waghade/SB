@@ -4,6 +4,7 @@ import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import path from 'path';
+import fs from 'fs';
 import { Server } from 'socket.io';
 import { ENV } from './config/env';
 import { connectDB } from './config/db';
@@ -12,6 +13,7 @@ import { errorHandler } from './middlewares/errorHandler';
 import { apiRateLimiter } from './middlewares/rateLimiter';
 import { setupSockets } from './sockets/socketHandler';
 import { seedDatabaseIfEmpty } from './scripts/seed';
+import { uploadDir } from './middlewares/upload';
 
 const app = express();
 const server = http.createServer(app);
@@ -44,9 +46,14 @@ app.use(morgan(ENV.NODE_ENV === 'production' ? 'combined' : 'dev'));
 app.use(express.json({ limit: '20mb' }));
 app.use(express.urlencoded({ extended: true, limit: '20mb' }));
 
-// Static uploads directory
-const uploadsDir = path.resolve(__dirname, '../uploads');
-app.use('/uploads', express.static(uploadsDir));
+// Static uploads directory (supports /tmp/uploads on Vercel and local uploads in dev)
+app.use('/uploads', express.static(uploadDir));
+
+// Fallback to bundled uploads directory if distinct and existing
+const bundledUploadsDir = path.resolve(__dirname, '../uploads');
+if (bundledUploadsDir !== uploadDir && fs.existsSync(bundledUploadsDir)) {
+  app.use('/uploads', express.static(bundledUploadsDir));
+}
 
 // Rate Limiting
 app.use('/api/', apiRateLimiter);
@@ -87,3 +94,6 @@ const start = async () => {
 };
 
 start();
+
+export { app, server };
+export default app;
